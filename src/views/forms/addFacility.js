@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 
-import { signupUser, useAuthState, useAuthDispatch } from '../../Context';
+import { useAuthState, useAuthDispatch } from '../../Context';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,17 +27,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const RegisterView = () => {
+const RegisterFarmerView = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const dispatch = useAuthDispatch();
-	const { loading, errorMessage } = useAuthState();
+  // const dispatch = useAuthDispatch();
+	// const { loading, errorMessage } = useAuthState();
 
   return (
     <Page
       className={classes.root}
-      title="Register"
+      title="Register Facility"
     >
       <Box
         display="flex"
@@ -65,14 +65,14 @@ const RegisterView = () => {
             }
             onSubmit={async (values) => {
               // console.log(values)
-              try {
-                let response = await signupUser(dispatch, values);
-                if (!response.email) return;
-                return navigate('/app/dashboard', { replace: true });
-              } catch (error) {
-                console.log(error);
-                console.log(errorMessage)
-              }
+              // try {
+              //   let response = await signupUser(dispatch, values);
+              //   if (!response.email) return;
+              //   return navigate('/app/dashboard', { replace: true });
+              // } catch (error) {
+              //   console.log(error);
+              //   console.log(errorMessage)
+              // }
             }}
           >
             {({
@@ -90,14 +90,7 @@ const RegisterView = () => {
                     color="textPrimary"
                     variant="h2"
                   >
-                    Create new account
-                  </Typography>
-                  <Typography
-                    color="textSecondary"
-                    gutterBottom
-                    variant="body2"
-                  >
-                    Use your email to create new account
+                    Create new Facility
                   </Typography>
                 </Box>
                 <TextField
@@ -138,7 +131,7 @@ const RegisterView = () => {
                   variant="outlined"
                 />
                 <TextField
-                  error={Boolean(touched.password && errors.email)}
+                  error={Boolean(touched.password && errors.password)}
                   fullWidth
                   helperText={touched.password && errors.password}
                   label="Password"
@@ -148,19 +141,6 @@ const RegisterView = () => {
                   onChange={handleChange}
                   type="password"
                   value={values.password}
-                  variant="outlined"
-                />
-                <TextField
-                  error={Boolean(touched.confirmPassword && errors.confirmPassword)}
-                  fullWidth
-                  helperText={touched.confirmPassword && errors.confirmPassword}
-                  label="Confirm Password"
-                  margin="normal"
-                  name="confirmPassword"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  type="password"
-                  value={values.confirmPassword}
                   variant="outlined"
                 />
                 <Box
@@ -204,23 +184,9 @@ const RegisterView = () => {
                     type="submit"
                     variant="contained"
                   >
-                    Sign up now
+                    Create Facility
                   </Button>
                 </Box>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Have an account?
-                  {' '}
-                  <Link
-                    component={RouterLink}
-                    to="/login"
-                    variant="h6"
-                  >
-                    Sign in
-                  </Link>
-                </Typography>
               </form>
             )}
           </Formik>
@@ -230,4 +196,4 @@ const RegisterView = () => {
   );
 };
 
-export default RegisterView;
+export default RegisterFarmerView;

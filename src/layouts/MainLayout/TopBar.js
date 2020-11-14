@@ -29,6 +29,7 @@ const TopBar = ({ className, ...rest }) => {
         <RouterLink to="/">
           <Logo />
         </RouterLink>
+        <h1>  Saabaza</h1>
       </Toolbar>
     </AppBar>
   );

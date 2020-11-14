@@ -15,6 +15,9 @@ import {
 import FacebookIcon from 'src/icons/Facebook';
 import GoogleIcon from 'src/icons/Google';
 import Page from 'src/components/Page';
+import { values } from 'lodash';
+
+import { loginUser, setup, useAuthState, useAuthDispatch } from '../../Context';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
 const LoginView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+
+  const dispatch = useAuthDispatch();
+	const { loading, errorMessage, token } = useAuthState();
 
   return (
     <Page
@@ -43,15 +49,29 @@ const LoginView = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: 'demo@devias.io',
-              password: 'Password123'
+              email: '',
+              password: ''
             }}
             validationSchema={Yup.object().shape({
               email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
               password: Yup.string().max(255).required('Password is required')
             })}
-            onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
+            onSubmit={async (values) => {
+              console.log(values)
+
+              // e.preventDefault();
+
+              try {
+                let response = await loginUser(dispatch, values);
+                console.log(response)
+                if (!response.username) return;
+                let loginSetup = await setup(dispatch, token)
+                if (loginSetup) {
+                  return navigate('/app/dashboard', { replace: true })
+                }
+              } catch (error) {
+                return console.log(error);
+              }
             }}
           >
             {({

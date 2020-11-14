@@ -6,6 +6,10 @@ import {
   Box,
   Button,
   Checkbox,
+  Select,
+  InputLabel,
+  MenuItem,
+  FormControl,
   Container,
   FormHelperText,
   Link,
@@ -15,29 +19,30 @@ import {
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 
-import { signupUser, useAuthState, useAuthDispatch } from '../../Context';
+import MuiPhoneNumber from 'material-ui-phone-number'
+import { postFarmer, useAuthState, useAuthDispatch } from '../../Context';
 
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
-    height: '100%',
+    minHeight: '100%',
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3)
   }
 }));
 
-const RegisterView = () => {
+const RegisterFarmerView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
 
   const dispatch = useAuthDispatch();
-	const { loading, errorMessage } = useAuthState();
+	const { loading, errorMessage, token } = useAuthState();
 
   return (
     <Page
       className={classes.root}
-      title="Register"
+      title="Register Farmer"
     >
       <Box
         display="flex"
@@ -64,10 +69,10 @@ const RegisterView = () => {
               })
             }
             onSubmit={async (values) => {
-              // console.log(values)
+              console.log(values)
               try {
-                let response = await signupUser(dispatch, values);
-                if (!response.email) return;
+                let response = await postFarmer(dispatch, values, token);
+                if (!response) return;
                 return navigate('/app/dashboard', { replace: true });
               } catch (error) {
                 console.log(error);
@@ -90,14 +95,7 @@ const RegisterView = () => {
                     color="textPrimary"
                     variant="h2"
                   >
-                    Create new account
-                  </Typography>
-                  <Typography
-                    color="textSecondary"
-                    gutterBottom
-                    variant="body2"
-                  >
-                    Use your email to create new account
+                    Create new Farmer
                   </Typography>
                 </Box>
                 <TextField
@@ -110,7 +108,7 @@ const RegisterView = () => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.firstName}
-                  variant="outlined"
+                  // variant="outlined"
                 />
                 <TextField
                   error={Boolean(touched.lastName && errors.lastName)}
@@ -122,7 +120,7 @@ const RegisterView = () => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.lastName}
-                  variant="outlined"
+                  // variant="outlined"
                 />
                 <TextField
                   error={Boolean(touched.email && errors.email)}
@@ -135,33 +133,76 @@ const RegisterView = () => {
                   onChange={handleChange}
                   type="email"
                   value={values.email}
-                  variant="outlined"
+                  // variant="outlined"
                 />
-                <TextField
-                  error={Boolean(touched.password && errors.email)}
+                <MuiPhoneNumber 
+                  defaultCountry={'ug'}
+                  error={Boolean(touched.phoneNumber && errors.phoneNumber)}
                   fullWidth
-                  helperText={touched.password && errors.password}
-                  label="Password"
+                  helperText={touched.phoneNumber && errors.phoneNumber}
+                  label="Phone Number"
                   margin="normal"
-                  name="password"
+                  name="phoneNumber"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  type="password"
-                  value={values.password}
-                  variant="outlined"
+                  value={values.phoneNumber}
+                  // variant="outlined"
                 />
+                <FormControl className={classes.formControl} fullWidth >
+                  <InputLabel id="demo-simple-select-helper-label">Gender</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    error={Boolean(touched.gender && errors.gender)}
+                    label="Gender"
+                    margin="normal"
+                    name="gender"
+                    onBlur={handleBlur}
+                    value={values.gender}
+                    onChange={handleChange}
+                    // variant="outlined"
+                  >
+                    <MenuItem value={'male'}>Male</MenuItem>
+                    <MenuItem value={'female'}>Female</MenuItem>
+                    <MenuItem value={'other'}>Other</MenuItem>
+                  </Select>
+                  <FormHelperText>{touched.gender && errors.gender}</FormHelperText>
+                </FormControl>
                 <TextField
-                  error={Boolean(touched.confirmPassword && errors.confirmPassword)}
+                  error={Boolean(touched.age && errors.age)}
                   fullWidth
-                  helperText={touched.confirmPassword && errors.confirmPassword}
-                  label="Confirm Password"
+                  helperText={touched.age && errors.age}
+                  label="Age"
                   margin="normal"
-                  name="confirmPassword"
+                  name="age"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  type="password"
-                  value={values.confirmPassword}
-                  variant="outlined"
+                  value={values.age}
+                  // variant="outlined"
+                />
+                <TextField
+                  error={Boolean(touched.village && errors.village)}
+                  fullWidth
+                  helperText={touched.village && errors.village}
+                  label="Village"
+                  margin="normal"
+                  name="village"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.village}
+                  // variant="outlined"
+                />
+                <TextField
+                  error={Boolean(touched.location && errors.location)}
+                  fullWidth
+                  helperText={touched.location && errors.location}
+                  label="Location"
+                  margin="normal"
+                  name="location"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.location}
+                  // variant="outlined"
                 />
                 <Box
                   alignItems="center"
@@ -204,23 +245,9 @@ const RegisterView = () => {
                     type="submit"
                     variant="contained"
                   >
-                    Sign up now
+                    Create Farmer
                   </Button>
                 </Box>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Have an account?
-                  {' '}
-                  <Link
-                    component={RouterLink}
-                    to="/login"
-                    variant="h6"
-                  >
-                    Sign in
-                  </Link>
-                </Typography>
               </form>
             )}
           </Formik>
@@ -230,4 +257,4 @@ const RegisterView = () => {
   );
 };
 
-export default RegisterView;
+export default RegisterFarmerView;

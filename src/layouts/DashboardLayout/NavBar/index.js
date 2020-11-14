@@ -24,7 +24,9 @@ import {
 } from 'react-feather';
 import NavItem from './NavItem';
 
-const user = {
+import { useAuthDispatch, logout, useAuthState } from '../../../Context';
+
+const userObj = {
   avatar: '/static/images/avatars/avatar_6.png',
   jobTitle: 'Senior Developer',
   name: 'Katarina Smith'
@@ -37,9 +39,29 @@ const items = [
     title: 'Dashboard'
   },
   {
+    href: '/app/dashboard',
+    icon: BarChartIcon,
+    title: 'Tasks'
+  },
+  {
+    href: '/app/employees',
+    icon: BarChartIcon,
+    title: 'Employees'
+  },
+  {
+    href: '/app/farmers',
+    icon: BarChartIcon,
+    title: 'Farmers'
+  },
+  {
     href: '/app/customers',
     icon: UsersIcon,
     title: 'Customers'
+  },
+  {
+    href: '/app/farms',
+    icon: BarChartIcon,
+    title: 'Farms'
   },
   {
     href: '/app/products',
@@ -93,6 +115,9 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
 
+  const dispatch = useAuthDispatch();
+	const { user, users, questions, token, loading } = useAuthState();
+
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
@@ -115,7 +140,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         <Avatar
           className={classes.avatar}
           component={RouterLink}
-          src={user.avatar}
+          src={userObj.avatar}
           to="/app/account"
         />
         <Typography
@@ -123,13 +148,13 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           color="textPrimary"
           variant="h5"
         >
-          {user.name}
+          {user}
         </Typography>
         <Typography
           color="textSecondary"
           variant="body2"
         >
-          {user.jobTitle}
+          {userObj.jobTitle}
         </Typography>
       </Box>
       <Divider />
@@ -146,39 +171,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         </List>
       </Box>
       <Box flexGrow={1} />
-      <Box
-        p={2}
-        m={2}
-        bgcolor="background.dark"
-      >
-        <Typography
-          align="center"
-          gutterBottom
-          variant="h4"
-        >
-          Need more?
-        </Typography>
-        <Typography
-          align="center"
-          variant="body2"
-        >
-          Upgrade to PRO version and access 20 more screens
-        </Typography>
-        <Box
-          display="flex"
-          justifyContent="center"
-          mt={2}
-        >
-          <Button
-            color="primary"
-            component="a"
-            href="https://react-material-kit.devias.io"
-            variant="contained"
-          >
-            See PRO version
-          </Button>
-        </Box>
-      </Box>
     </Box>
   );
 

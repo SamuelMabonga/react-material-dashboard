@@ -42,6 +42,7 @@ const TopBar = ({
         <RouterLink to="/">
           <Logo />
         </RouterLink>
+        <h1>Saabaza</h1>
         <Box flexGrow={1} />
         <Hidden mdDown>
           <IconButton color="inherit">
